@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["nodejs", "npm", "php82", "php82Extensions.pdo_sqlite", "php82Extensions.mbstring", "php82Extensions.dom", "php82Extensions.curl", "php82Extensions.gd", "php82Extensions.zip"]
+nixPkgs = ["nodejs_18", "php82", "php82Extensions.pdo_sqlite", "php82Extensions.mbstring", "php82Extensions.dom", "php82Extensions.curl", "php82Extensions.gd", "php82Extensions.zip"]
 
 [phases.install]
 dependsOn = ["setup"]
