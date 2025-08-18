@@ -29,14 +29,12 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 RUN npm ci && npm run build
 
-# SQLiteデータベースを作成
-RUN touch /tmp/database.sqlite
-RUN php artisan migrate --force
-RUN php artisan config:cache
-RUN php artisan route:cache
+# 起動時にSQLiteデータベースを作成するスクリプト
+RUN echo '#!/bin/bash\ntouch /tmp/database.sqlite\nchmod 666 /tmp/database.sqlite\nphp artisan migrate --force 2>/dev/null || true\nphp artisan config:clear 2>/dev/null || true\necho "Starting Laravel server..."\nexec php artisan serve --host=0.0.0.0 --port=${PORT:-8080}' > /start.sh
+RUN chmod +x /start.sh
 
 # ポートを公開
-EXPOSE $PORT
+EXPOSE 8080
 
 # アプリケーションを起動
-CMD php artisan serve --host=0.0.0.0 --port=$PORT
+CMD ["/start.sh"]
