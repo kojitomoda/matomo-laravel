@@ -8,7 +8,7 @@ import { ja } from 'date-fns/locale';
 interface ImpInputModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    trackingUrlName?: string;
+    trackingUrlName?: string | null;
 }
 
 interface DayImpression {

@@ -19,7 +19,7 @@ interface PeriodSelectorProps {
   currentPeriod: number;
   onPeriodChange: (period: number) => void;
   onDateRangeChange?: (startDate: string, endDate: string) => void;
-  trackingUrlName?: string;
+  trackingUrlName?: string | null;
 }
 
 export function PeriodSelector({ periods, currentPeriod, onPeriodChange, onDateRangeChange, trackingUrlName }: PeriodSelectorProps) {
