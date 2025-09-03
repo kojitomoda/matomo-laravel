@@ -12,6 +12,7 @@ use App\Services\Matomo\MatomoCvrDataService;
 use App\Services\Matomo\MatomoCpaDataService;
 use App\Services\Matomo\MatomoCttDataService;
 use App\Services\Matomo\MatomoCvtDataService;
+use App\Services\Matomo\MatomoCtrDataService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -27,7 +28,8 @@ class DashboardController extends Controller
         private MatomoCvrDataService $cvrDataService,
         private MatomoCpaDataService $cpaDataService,
         private MatomoCttDataService $cttDataService,
-        private MatomoCvtDataService $cvtDataService
+        private MatomoCvtDataService $cvtDataService,
+        private MatomoCtrDataService $ctrDataService
     ) {}
 
     /**
@@ -35,12 +37,23 @@ class DashboardController extends Controller
      */
     public function index(Request $request): Response
     {
-        // Default to 7 days if no period specified
-        $period = $request->integer('period', 7);
+        // Check if custom date range is provided
+        $startDate = $request->string('start_date')->toString() ?: null;
+        $endDate = $request->string('end_date')->toString() ?: null;
+        
+        // If custom date range is provided, calculate period in days
+        if ($startDate && $endDate) {
+            $start = \Carbon\Carbon::parse($startDate);
+            $end = \Carbon\Carbon::parse($endDate);
+            $period = $start->diffInDays($end) + 1; // +1 to include both start and end dates
+        } else {
+            // Default to 7 days if no period specified
+            $period = $request->integer('period', 7);
+            // Validate period is one of allowed values
+            $period = in_array($period, [7, 14, 30, 100]) ? $period : 7;
+        }
+        
         $trackingLinkId = $request->string('tracking_link_id')->toString() ?: null;
-
-        // Validate period is one of allowed values
-        $period = in_array($period, [7, 14, 30, 100]) ? $period : 7;
 
         // Get click data from Matomo service
         $rawData = $this->clickDataService->getClickData($period, $trackingLinkId);
@@ -68,6 +81,10 @@ class DashboardController extends Controller
         
         // Get CVT data
         $cvtData = $this->cvtDataService->getCvtDataForChart($period, $cvrData['total_conversions']);
+        
+        // Get CTR data (using mock impressions data for now)
+        $mockImpressions = $this->getMockImpressions($chartData['totalClicks']);
+        $ctrData = $this->ctrDataService->getCtrData($period, $chartData['totalClicks'], $mockImpressions);
 
         return Inertia::render('dashboard', [
             'clickAnalytics' => $chartData,
@@ -78,6 +95,7 @@ class DashboardController extends Controller
             'cpaAnalytics' => $cpaData,
             'cttAnalytics' => $cttData,
             'cvtAnalytics' => $cvtData,
+            'ctrAnalytics' => $ctrData,
             'availablePeriods' => [
                 ['value' => 7, 'label' => '7日間'],
                 ['value' => 14, 'label' => '14日間'],
@@ -124,5 +142,17 @@ class DashboardController extends Controller
             'period' => $period,
             'data' => $chartData
         ]);
+    }
+    
+    /**
+     * Generate mock impressions data for CTR calculation
+     */
+    private function getMockImpressions(int $clicks): int
+    {
+        // CTRが1-5%程度になるようにIMP数を生成
+        $ctrRange = [0.01, 0.05]; // 1-5%
+        $randomCtr = $ctrRange[0] + mt_rand() / mt_getrandmax() * ($ctrRange[1] - $ctrRange[0]);
+        
+        return intval($clicks / $randomCtr);
     }
 }

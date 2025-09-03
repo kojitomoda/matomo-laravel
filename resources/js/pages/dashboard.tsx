@@ -4,12 +4,20 @@ import { CpaAnalyticsCard } from '@/components/cpa-analytics-card';
 import { CttHorizontalBarChart } from '@/components/ctt-horizontal-bar-chart';
 import { CvtHorizontalBarChart } from '@/components/cvt-horizontal-bar-chart';
 import { CvrAnalyticsCard } from '@/components/cvr-analytics-card';
+import { CtrAnalyticsCard } from '@/components/ctr-analytics-card';
 import { DevicePieChart } from '@/components/device-pie-chart';
 import { PeriodSelector } from '@/components/period-selector';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type ClickAnalytics, type DeviceAnalytics, type BrowserAnalytics, type CpcAnalytics, type CvrAnalytics, type CpaAnalytics, type CttAnalytics, type CvtAnalytics, type PeriodOption } from '@/types';
+
+interface CtrAnalytics {
+    ctr_formatted: string;
+    ctr_trend: string;
+    ctr_change_percent: number;
+    total_clicks: number;
+    total_impressions: number;
+}
 import { Head, router, usePage } from '@inertiajs/react';
 import { ArrowUp, ArrowDown, Minus, TrendingUp } from 'lucide-react';
 
@@ -29,19 +37,30 @@ interface DashboardProps {
     cpaAnalytics: CpaAnalytics;
     cttAnalytics: CttAnalytics;
     cvtAnalytics: CvtAnalytics;
+    ctrAnalytics: CtrAnalytics;
     availablePeriods: PeriodOption[];
     currentPeriod: number;
 }
 
 export default function Dashboard() {
-    const { clickAnalytics, deviceAnalytics, browserAnalytics, cpcAnalytics, cvrAnalytics, cpaAnalytics, cttAnalytics, cvtAnalytics, availablePeriods, currentPeriod } = usePage<DashboardProps>().props;
-    
+    const { clickAnalytics, deviceAnalytics, browserAnalytics, cpcAnalytics, cvrAnalytics, cpaAnalytics, cttAnalytics, cvtAnalytics, ctrAnalytics, availablePeriods, currentPeriod } = usePage<DashboardProps>().props;
+
     // URLパラメータから測定URL名を取得
     const urlParams = new URLSearchParams(window.location.search);
     const trackingUrlName = urlParams.get('name') || null;
 
     const handlePeriodChange = (period: number) => {
         router.get('/dashboard', { period }, {
+            preserveState: true,
+            preserveScroll: true,
+        });
+    };
+
+    const handleDateRangeChange = (startDate: string, endDate: string) => {
+        router.get('/dashboard', {
+            start_date: startDate,
+            end_date: endDate
+        }, {
             preserveState: true,
             preserveScroll: true,
         });
@@ -96,10 +115,12 @@ export default function Dashboard() {
                         periods={availablePeriods}
                         currentPeriod={currentPeriod}
                         onPeriodChange={handlePeriodChange}
+                        onDateRangeChange={handleDateRangeChange}
+                        trackingUrlName={trackingUrlName}
                     />
                 </div>
                 {/* Summary Cards - Top Row */}
-                <div className="grid auto-rows-min gap-4 md:grid-cols-2">
+                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">総クリック数</CardTitle>
@@ -133,6 +154,8 @@ export default function Dashboard() {
                             </div>
                         </CardContent>
                     </Card>
+
+                    <CtrAnalyticsCard data={ctrAnalytics} />
                 </div>
 
                 {/* CVR & CPA Cards - Bottom Row */}
