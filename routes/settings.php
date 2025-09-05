@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
-    Route::redirect('settings', '/settings/profile');
+    Route::redirect('settings', '/settings/site-list');
 
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -25,4 +25,8 @@ Route::middleware('auth')->group(function () {
     Route::get('settings/site-management', function () {
         return Inertia::render('settings/site-management');
     })->name('site-management');
+
+    Route::get('settings/site-list', function () {
+        return Inertia::render('settings/site-list');
+    })->name('site-list');
 });

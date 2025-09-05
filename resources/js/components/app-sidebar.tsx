@@ -8,6 +8,7 @@ import { Link } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Plus, BarChart3, Target } from 'lucide-react';
 import { useState } from 'react';
 import AppLogo from './app-logo';
+import { SiteSelector } from './site-selector';
 import { NewTrackingUrlModal } from './new-tracking-url-modal';
 import { NewCvModal } from './new-cv-modal';
 
@@ -38,10 +39,8 @@ export function AppSidebar() {
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
-                                <AppLogo />
-                            </Link>
+                        <SidebarMenuButton size="lg" className="hover:bg-transparent">
+                            <SiteSelector />
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>

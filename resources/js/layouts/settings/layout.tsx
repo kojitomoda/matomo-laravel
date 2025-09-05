@@ -8,6 +8,11 @@ import { type PropsWithChildren } from 'react';
 
 const sidebarNavItems: NavItem[] = [
     {
+        title: 'サイト一覧',
+        href: '/settings/site-list',
+        icon: null,
+    },
+    {
         title: 'ドメイン管理',
         href: '/settings/site-management',
         icon: null,
@@ -59,8 +64,8 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
 
                 <Separator className="my-6 lg:hidden" />
 
-                <div className="flex-1 md:max-w-2xl">
-                    <section className="max-w-xl space-y-12">{children}</section>
+                <div className="flex-1">
+                    <section className="space-y-12">{children}</section>
                 </div>
             </div>
         </div>
