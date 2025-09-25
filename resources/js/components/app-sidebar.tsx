@@ -86,18 +86,6 @@ export function AppSidebar() {
                     </Button>
                 </div>
                 
-                {/* 新規キャンペーン追加ボタン */}
-                <div className="px-2 mt-2">
-                    <Button 
-                        onClick={() => setIsModalOpen(true)}
-                        className="w-full justify-start text-orange-500 hover:text-orange-600 bg-sidebar hover:bg-sidebar/80 border-none text-base"
-                        variant="outline"
-                    >
-                        <Plus className="mr-2 h-4 w-4" />
-                        新規キャンペーン追加
-                    </Button>
-                </div>
-
                 {/* キャンペーン名 */}
                 <div className="px-2 mt-4">
                     <SidebarMenu>
@@ -131,6 +119,18 @@ export function AppSidebar() {
 
             <SidebarFooter>
                 <NavFooter items={footerNavItems} className="mt-auto" />
+                
+                {/* 新規キャンペーン追加ボタン */}
+                <div className="px-2 mb-2">
+                    <Button 
+                        onClick={() => setIsModalOpen(true)}
+                        className="w-full justify-start text-orange-500 hover:text-orange-600 bg-sidebar hover:bg-sidebar/80 border-none text-base"
+                        variant="outline"
+                    >
+                        <Plus className="mr-2 h-4 w-4" />
+                        新規キャンペーン追加
+                    </Button>
+                </div>
                 
                 {/* 新規CV設定ボタン */}
                 <div className="px-2 mb-2">
