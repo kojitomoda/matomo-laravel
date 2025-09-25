@@ -10,26 +10,55 @@ const mockSites = [
     { id: '4', name: 'Nobilista', url: 'https://co.nobilista.com/ja/' },
 ];
 
-export function SiteSelector() {
-    const [selectedSite, setSelectedSite] = useState('1'); // デフォルトはCov
+interface SiteSelectorProps {
+    onSiteChange?: (siteId: string) => void;
+}
+
+export function SiteSelector({ onSiteChange }: SiteSelectorProps) {
+    // URLパラメータから現在選択されているプロジェクトを取得
+    const getInitialProject = () => {
+        if (typeof window === 'undefined') return '1';
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('project') || '1';
+    };
+    
+    const [selectedSite, setSelectedSite] = useState(getInitialProject());
+
+    const handleValueChange = (value: string) => {
+        setSelectedSite(value);
+        onSiteChange?.(value);
+        
+        // プロジェクト変更時にダッシュボードページを更新
+        if (typeof window !== 'undefined' && window.location.pathname === '/dashboard') {
+            const currentUrl = new URL(window.location);
+            // クエリパラメータがない場合（キャンペーン一覧表示の場合）のみプロジェクトパラメータを追加
+            if (!currentUrl.searchParams.get('name')) {
+                currentUrl.searchParams.set('project', value);
+                window.location.href = currentUrl.toString();
+            }
+        }
+    };
 
     return (
-        <div className="flex items-center gap-3 px-2">
-            <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-                <Globe className="size-5 text-white dark:text-black" />
+        <div className="px-2">
+            <div className="text-sm text-muted-foreground mt-1">プロジェクト名</div>
+            <div className="flex items-center gap-3">
+                {/*<div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">*/}
+                {/*    <Globe className="size-5 text-white dark:text-black" />*/}
+                {/*</div>*/}
+                <Select value={selectedSite} onValueChange={handleValueChange}>
+                    <SelectTrigger className="flex-1 py-2 border-0 bg-transparent p-0 h-auto shadow-none focus:ring-0 text-xl font-semibold">
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {mockSites.map((site) => (
+                            <SelectItem key={site.id} value={site.id} className="text-base">
+                                {site.name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
             </div>
-            <Select value={selectedSite} onValueChange={setSelectedSite}>
-                <SelectTrigger className="flex-1 border-0 bg-transparent p-0 h-auto shadow-none focus:ring-0 text-base font-semibold">
-                    <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                    {mockSites.map((site) => (
-                        <SelectItem key={site.id} value={site.id}>
-                            {site.name}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
         </div>
     );
 }

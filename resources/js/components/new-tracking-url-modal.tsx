@@ -66,9 +66,9 @@ export function NewTrackingUrlModal({ open, onOpenChange }: NewTrackingUrlModalP
         <Dialog open={open} onOpenChange={handleClose}>
             <DialogContent className="sm:max-w-[600px] bg-sidebar">
                 <DialogHeader>
-                    <DialogTitle>新規測定URL発行</DialogTitle>
+                    <DialogTitle>新規キャンペーン追加</DialogTitle>
                     <DialogDescription>
-                        新しい測定URLを発行します。<br/>入力された情報を元に測定用のURLが生成されます。
+                        新しいキャンペーンを追加します。<br/>入力された情報を元にキャンペーン用のURLが生成されます。
                     </DialogDescription>
                 </DialogHeader>
 
@@ -76,11 +76,11 @@ export function NewTrackingUrlModal({ open, onOpenChange }: NewTrackingUrlModalP
                     <>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="displayName">広告名</Label>
+                                <Label htmlFor="displayName">キャンペーン名</Label>
                                 <Input
                                     id="displayName"
                                     type="text"
-                                    placeholder="例: 検索広告_キーワード1"
+                                    placeholder="例: 検索キャンペーン_キーワード1"
                                     value={formData.displayName}
                                     onChange={(e) => setFormData(prev => ({ ...prev, displayName: e.target.value }))}
                                     required
@@ -88,7 +88,7 @@ export function NewTrackingUrlModal({ open, onOpenChange }: NewTrackingUrlModalP
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="adUrl">広告URL（ドメイン以下）</Label>
+                                <Label htmlFor="adUrl">キャンペーンURL（ドメイン以下）</Label>
                                 <Input
                                     id="adUrl"
                                     type="text"
@@ -100,7 +100,7 @@ export function NewTrackingUrlModal({ open, onOpenChange }: NewTrackingUrlModalP
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="adBudget">広告費用（月額）</Label>
+                                <Label htmlFor="adBudget">キャンペーン費用（月額）</Label>
                                 <div className="relative">
                                     <Input
                                         id="adBudget"
@@ -146,7 +146,7 @@ export function NewTrackingUrlModal({ open, onOpenChange }: NewTrackingUrlModalP
                 {generatedUrl && (
                     <div className="space-y-4">
                         <div className="space-y-2">
-                            <Label>生成された測定URL</Label>
+                            <Label>生成されたキャンペーンURL</Label>
                             <div className="flex items-center space-x-2">
                                 <Input
                                     value={generatedUrl}

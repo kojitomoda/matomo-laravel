@@ -103,15 +103,17 @@ export function PeriodSelector({ periods, currentPeriod, onPeriodChange, onDateR
         </PopoverContent>
       </Popover>
 
-      <Button
-        variant="outline"
-        size="sm"
-        className="flex items-center gap-1"
-        onClick={() => setIsImpModalOpen(true)}
-      >
-        <BarChart3 className="h-4 w-4" />
-        IMP入力
-      </Button>
+      {trackingUrlName && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="flex items-center gap-1"
+          onClick={() => setIsImpModalOpen(true)}
+        >
+          <BarChart3 className="h-4 w-4" />
+          IMP入力
+        </Button>
+      )}
 
       <ImpInputModal
         open={isImpModalOpen}

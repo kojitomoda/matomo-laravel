@@ -14,25 +14,48 @@ import { NewCvModal } from './new-cv-modal';
 
 const mainNavItems: NavItem[] = [];
 
-// 測定URL一覧（プロトタイプ用）
-const trackingUrls = [
-    { id: '1', displayName: 'Google検索広告_キーワード1' },
-    { id: '2', displayName: 'Meta広告_見込み顧客獲得' },
-    { id: '3', displayName: 'Yahoo!検索広告_ブランド名' },
-    { id: '4', displayName: 'Instagram広告_商品紹介' },
-    { id: '5', displayName: 'YouTube広告_動画宣伝' },
-    { id: '6', displayName: 'X(Twitter)広告_認知拡大' },
-    { id: '7', displayName: 'LinkedIn広告_BtoB営業' },
-    { id: '8', displayName: 'TikTok広告_若年層向け' },
-    { id: '9', displayName: 'アフィリエイト_ASP経由' },
-    { id: '10', displayName: 'メール配信_既存顧客向け' },
-];
+// サイト別キャンペーンURL一覧（プロトタイプ用）
+const trackingUrlsBySite: Record<string, Array<{ id: string; displayName: string }>> = {
+    '1': [ // Cov
+        { id: '1', displayName: 'Google検索広告_キーワード1' },
+        { id: '2', displayName: 'Meta広告_見込み顧客獲得' },
+        { id: '3', displayName: 'Yahoo!検索広告_ブランド名' },
+        { id: '4', displayName: 'Instagram広告_商品紹介' },
+        { id: '5', displayName: 'YouTube広告_動画宣伝' },
+    ],
+    '2': [ // 9ZLabo
+        { id: '6', displayName: 'X(Twitter)広告_認知拡大' },
+        { id: '7', displayName: 'LinkedIn広告_BtoB営業' },
+        { id: '8', displayName: 'TikTok広告_若年層向け' },
+        { id: '9', displayName: 'アフィリエイト_ASP経由' },
+        { id: '10', displayName: 'メール配信_既存顧客向け' },
+        { id: '11', displayName: 'リスティング広告_ブランド' },
+        { id: '12', displayName: 'ディスプレイ広告_リターゲティング' },
+    ],
+    '3': [ // Studioレジスタ
+        { id: '13', displayName: 'Google広告_地域限定' },
+        { id: '14', displayName: 'Facebook広告_イベント集客' },
+        { id: '15', displayName: 'Instagram広告_サービス紹介' },
+        { id: '16', displayName: 'YouTube広告_実績動画' },
+    ],
+    '4': [ // Nobilista
+        { id: '17', displayName: 'SEOツール_リスティング' },
+        { id: '18', displayName: 'コンテンツマーケティング_記事' },
+        { id: '19', displayName: 'メルマガ_機能紹介' },
+        { id: '20', displayName: 'ウェビナー_集客広告' },
+        { id: '21', displayName: 'アフィリエイト_パートナー' },
+    ],
+};
 
 const footerNavItems: NavItem[] = [];
 
 export function AppSidebar() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCvModalOpen, setIsCvModalOpen] = useState(false);
+    const [selectedSite, setSelectedSite] = useState('1'); // デフォルトはCov
+
+    // 選択されたサイトのキャンペーンURL一覧を取得
+    const trackingUrls = trackingUrlsBySite[selectedSite] || [];
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -40,7 +63,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" className="hover:bg-transparent">
-                            <SiteSelector />
+                            <SiteSelector onSiteChange={setSelectedSite} />
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
@@ -49,25 +72,39 @@ export function AppSidebar() {
             <SidebarContent>
                 <NavMain items={mainNavItems} />
                 
-                {/* 新規測定URLボタン */}
+                {/* キャンペーン一覧ボタン */}
                 <div className="px-2 mt-4">
+                    <Button 
+                        asChild
+                        className="w-full justify-start text-blue-600 hover:text-blue-800 bg-sidebar hover:bg-sidebar/80 border-none text-base"
+                        variant="outline"
+                    >
+                        <Link href="/dashboard">
+                            <LayoutGrid className="mr-2 h-4 w-4" />
+                            キャンペーン一覧
+                        </Link>
+                    </Button>
+                </div>
+                
+                {/* 新規キャンペーン追加ボタン */}
+                <div className="px-2 mt-2">
                     <Button 
                         onClick={() => setIsModalOpen(true)}
                         className="w-full justify-start text-orange-500 hover:text-orange-600 bg-sidebar hover:bg-sidebar/80 border-none text-base"
                         variant="outline"
                     >
                         <Plus className="mr-2 h-4 w-4" />
-                        新規測定URL
+                        新規キャンペーン追加
                     </Button>
                 </div>
 
-                {/* 測定URL一覧 */}
+                {/* キャンペーン名 */}
                 <div className="px-2 mt-4">
                     <SidebarMenu>
                         <SidebarMenuItem>
                             <SidebarMenuButton className="text-sm font-medium opacity-70">
                                 <BarChart3 className="mr-2 h-4 w-4" />
-                                測定URL一覧
+                                キャンペーン名
                             </SidebarMenuButton>
                             <SidebarMenuSub className="space-y-1">
                                 {trackingUrls.map((url) => (

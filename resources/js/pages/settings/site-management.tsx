@@ -16,7 +16,7 @@ import SettingsLayout from '@/layouts/settings/layout';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'ドメイン管理',
+        title: '新規プロジェクト追加',
         href: '/settings/site-management',
     },
 ];
@@ -111,20 +111,20 @@ _paq.push(['setSiteId', '1']);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="ドメイン管理" />
+            <Head title="新規プロジェクト追加" />
 
             <SettingsLayout>
                 <div className="space-y-6">
-                    <HeadingSmall title="ドメイン管理" description="ドメイン検証を行い、トラッキングタグを設置するサイトを管理します" />
+                    <HeadingSmall title="新規プロジェクト追加" description="新しいプロジェクトのドメイン検証を行い、トラッキングタグを設置します" />
 
                     <Card>
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <Globe className="h-5 w-5" />
-                                ドメイン追加
+                                プロジェクト追加
                             </CardTitle>
                             <CardDescription>
-                                タグ設置したサイトが正しいサイトであるか、ドメイン検証を行います
+                                新規プロジェクトのドメインを追加し、トラッキング設定を行います
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">

@@ -8,23 +8,18 @@ import { type PropsWithChildren } from 'react';
 
 const sidebarNavItems: NavItem[] = [
     {
-        title: 'サイト一覧',
+        title: 'プロジェクト一覧',
         href: '/settings/site-list',
         icon: null,
     },
     {
-        title: 'ドメイン管理',
+        title: '新規プロジェクト追加',
         href: '/settings/site-management',
         icon: null,
     },
     {
         title: 'パスワード',
         href: '/settings/password',
-        icon: null,
-    },
-    {
-        title: '外観',
-        href: '/settings/appearance',
         icon: null,
     },
 ];
