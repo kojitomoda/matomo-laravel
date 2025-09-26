@@ -28,14 +28,9 @@ export function SiteSelector({ onSiteChange }: SiteSelectorProps) {
         setSelectedSite(value);
         onSiteChange?.(value);
         
-        // プロジェクト変更時にダッシュボードページを更新
-        if (typeof window !== 'undefined' && window.location.pathname === '/dashboard') {
-            const currentUrl = new URL(window.location);
-            // クエリパラメータがない場合（キャンペーン一覧表示の場合）のみプロジェクトパラメータを追加
-            if (!currentUrl.searchParams.get('name')) {
-                currentUrl.searchParams.set('project', value);
-                window.location.href = currentUrl.toString();
-            }
+        // プロジェクト変更時は常にキャンペーン一覧ページに遷移
+        if (typeof window !== 'undefined') {
+            window.location.href = `/dashboard?project=${value}`;
         }
     };
 
