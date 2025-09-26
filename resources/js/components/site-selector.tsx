@@ -12,9 +12,10 @@ const mockSites = [
 
 interface SiteSelectorProps {
     onSiteChange?: (siteId: string) => void;
+    initialValue?: string;
 }
 
-export function SiteSelector({ onSiteChange }: SiteSelectorProps) {
+export function SiteSelector({ onSiteChange, initialValue }: SiteSelectorProps) {
     // URLパラメータから現在選択されているプロジェクトを取得
     const getInitialProject = () => {
         if (typeof window === 'undefined') return '1';
@@ -22,7 +23,7 @@ export function SiteSelector({ onSiteChange }: SiteSelectorProps) {
         return urlParams.get('project') || '1';
     };
     
-    const [selectedSite, setSelectedSite] = useState(getInitialProject());
+    const [selectedSite, setSelectedSite] = useState(initialValue || getInitialProject());
 
     const handleValueChange = (value: string) => {
         setSelectedSite(value);

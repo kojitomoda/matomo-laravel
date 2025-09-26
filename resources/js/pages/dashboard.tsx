@@ -271,26 +271,35 @@ export default function Dashboard() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {selectedProjectData.campaigns.map((campaign, campaignIndex) => (
-                                            <TableRow key={campaignIndex}>
-                                                <TableCell className="font-medium">
-                                                    <button
-                                                        onClick={() => router.get('/dashboard', {
-                                                            name: campaign.name,
-                                                            tracking_url: campaignIndex + 1
-                                                        })}
-                                                        className="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer text-left w-full"
-                                                    >
-                                                        {campaign.name}
-                                                    </button>
-                                                </TableCell>
-                                                <TableCell className="text-right">{campaign.imp.toLocaleString()}</TableCell>
-                                                <TableCell className="text-right">{campaign.clicks.toLocaleString()}</TableCell>
-                                                <TableCell className="text-right">{campaign.ctr}</TableCell>
-                                                <TableCell className="text-right">{campaign.cv}</TableCell>
-                                                <TableCell className="text-right">{campaign.cvr}</TableCell>
-                                            </TableRow>
-                                        ))}
+                                        {selectedProjectData.campaigns.map((campaign, campaignIndex) => {
+                                            // プロジェクトに応じたベースIDを設定
+                                            const baseId = projectId === '1' ? 0 : 
+                                                          projectId === '2' ? 5 :
+                                                          projectId === '3' ? 13 :
+                                                          projectId === '4' ? 16 : 0;
+                                            const trackingUrlId = baseId + campaignIndex + 1;
+                                            
+                                            return (
+                                                <TableRow key={campaignIndex}>
+                                                    <TableCell className="font-medium">
+                                                        <button
+                                                            onClick={() => router.get('/dashboard', {
+                                                                name: campaign.name,
+                                                                tracking_url: trackingUrlId
+                                                            })}
+                                                            className="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer text-left w-full"
+                                                        >
+                                                            {campaign.name}
+                                                        </button>
+                                                    </TableCell>
+                                                    <TableCell className="text-right">{campaign.imp.toLocaleString()}</TableCell>
+                                                    <TableCell className="text-right">{campaign.clicks.toLocaleString()}</TableCell>
+                                                    <TableCell className="text-right">{campaign.ctr}</TableCell>
+                                                    <TableCell className="text-right">{campaign.cv}</TableCell>
+                                                    <TableCell className="text-right">{campaign.cvr}</TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
                                     </TableBody>
                                 </Table>
                             </CardContent>

@@ -52,7 +52,15 @@ const footerNavItems: NavItem[] = [];
 export function AppSidebar() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isCvModalOpen, setIsCvModalOpen] = useState(false);
-    const [selectedSite, setSelectedSite] = useState('1'); // デフォルトはCov
+    
+    // URLパラメータから現在選択されているプロジェクトを取得
+    const getInitialProject = () => {
+        if (typeof window === 'undefined') return '1';
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('project') || '1';
+    };
+    
+    const [selectedSite, setSelectedSite] = useState(getInitialProject());
 
     // 選択されたサイトのキャンペーンURL一覧を取得
     const trackingUrls = trackingUrlsBySite[selectedSite] || [];
@@ -63,7 +71,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" className="hover:bg-transparent">
-                            <SiteSelector onSiteChange={setSelectedSite} />
+                            <SiteSelector onSiteChange={setSelectedSite} initialValue={selectedSite} />
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
