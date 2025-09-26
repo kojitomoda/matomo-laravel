@@ -33,10 +33,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', [
-            'name' => 'Google検索広告_キーワード1',
-            'tracking_url' => '1'
-        ], absolute: false));
+        return redirect()->intended(route('dashboard'));
     }
 
     /**
