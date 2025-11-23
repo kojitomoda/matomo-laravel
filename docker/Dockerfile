@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm
 
-# PHP拡張機能をインストール
+# PHP拡張機能をインストーこル
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 # Composerをインストール
@@ -22,19 +22,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # 作業ディレクトリを設定
 WORKDIR /app
 
-# アプリケーションファイルをコピー
-COPY .. .
-
-# 依存関係をインストール
-RUN composer install --no-dev --optimize-autoloader
-RUN npm ci && npm run build
-
-# 起動時にSQLiteデータベースを作成するスクリプト
-RUN echo '#!/bin/bash\ntouch /tmp/database.sqlite\nchmod 666 /tmp/database.sqlite\nphp artisan migrate --force 2>/dev/null || true\nphp artisan config:clear 2>/dev/null || true\necho "Starting Laravel server..."\nexec php artisan serve --host=0.0.0.0 --port=${PORT:-8080}' > /start.sh
-RUN chmod +x /start.sh
-
-# ポートを公開
-EXPOSE 8080
+# 開発用: ボリュームマウントを使用するためCOPYは不要
+# 依存関係は起動時にインストール
 
 # アプリケーションを起動
-CMD ["/start.sh"]
+CMD ["sh", "-c", "composer install && php artisan migrate --force 2>/dev/null || true && php artisan config:clear 2>/dev/null || true && echo 'Starting Laravel server...' && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
