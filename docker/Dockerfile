@@ -23,7 +23,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 
 # アプリケーションファイルをコピー
-COPY . .
+COPY .. .
 
 # 依存関係をインストール
 RUN composer install --no-dev --optimize-autoloader
